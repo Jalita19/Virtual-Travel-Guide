@@ -1,0 +1,24 @@
+{
+  "name": "virtual-travel-guide",
+  "version": "1.0.0",
+  "description": "npm install",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jalita Johnson",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jalita19/Virtual-Travel-Guide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jalita19/Virtual-Travel-Guide/issues"
+  },
+  "homepage": "https://github.com/Jalita19/Virtual-Travel-Guide#readme"
+}

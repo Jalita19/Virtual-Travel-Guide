@@ -1,0 +1,25 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Travel Guide</title>
+</head>
+<body>
+    <h1>Destinations</h1>
+    <ul>
+        <% destinations.forEach(destination => { %>
+            <li>
+                <h2><%= destination.name %></h2>
+                <p><%= destination.description %></p>
+            </li>
+        <% }) %>
+    </ul>
+
+    <h2>Add a New Destination</h2>
+    <form action="/api/destinations" method="post">
+        <input type="text" name="name" placeholder="Destination name" required>
+        <input type="text" name="description" placeholder="Description" required>
+        <button type="submit">Add Destination</button>
+    </form>
+</body>
+</html>
