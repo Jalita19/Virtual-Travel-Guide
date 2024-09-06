@@ -113,6 +113,7 @@
 //     }
 //   });
   
+
 //   app.delete('/api/destination/:id', (req, res) => {
 //     const index = destinations.findIndex(d => d.id == req.params.id);
 //     if (index !== -1) {
@@ -303,6 +304,32 @@ const comments = [
     { id: 1, destinationId: 1, userId: 1, text: 'Amazing city!' },
     { id: 2, destinationId: 2, userId: 2, text: 'I love the skyscrapers!' }
 ];
+// Middleware to parse query parameters
+app.use(express.urlencoded({ extended: true }));
+
+// Route to handle search and display results
+app.get('/', (req, res) => {
+  const query = req.query.name ? req.query.name.toLowerCase() : '';
+  
+  // Filter destinations based on the search query
+  const filteredDestinations = destinations.filter(destination => 
+    destination.name.toLowerCase().includes(query)
+  );
+
+  // Render the results (assuming you're using EJS)
+  res.render('index', { destinations: filteredDestinations });
+});
+
+// Route to handle adding new destinations (POST request)
+app.post('/api/destination', (req, res) => {
+  // Handle adding new destination logic here
+});
+
+// Route to handle file uploads
+app.post('/upload', (req, res) => {
+  // Handle file upload logic here
+});
+
 
 // Routes for destinations
 app.get('/', (req, res) => {
