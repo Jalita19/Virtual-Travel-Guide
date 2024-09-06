@@ -243,9 +243,7 @@ const path = require('path');
 const multer = require('multer');
 const logger = require('./middleware/logger');
 const authenticate = require('./middleware/authenticate');
-// console.log('Trying to require error-handler from:', __dirname + '/error-handler');
-const errorHandler = require('.');
-
+const errorHandler = require('./error-handler'); // Correct path
 
 const app = express();
 const port = 3000;
@@ -262,7 +260,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Middleware function
+// Middleware functions
 const myMiddleware = (req, res, next) => {
     console.log('Middleware function executed');
     next();
@@ -270,25 +268,17 @@ const myMiddleware = (req, res, next) => {
 
 // Use middleware
 app.use(myMiddleware);
-
-// Middleware to parse URL-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Serve static files (like images)
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger); // Custom logger middleware
+app.use('/api/private', authenticate); // Authentication middleware
 
 // Set EJS as the template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Use custom logger middleware globally
-app.use(logger);
-app.use(express.json());
-
-// Use authenticate middleware for specific routes
-app.use('/api/private', authenticate);
-
-// Sample data for destinations, users, and comments
+// Sample data
 const destinations = [
     { id: 1, name: 'Paris', description: 'The city of lights.', image: '/images/paris.jpg' },
     { id: 2, name: 'New York', description: 'The city that never sleeps.', image: '/images/newyork.jpg' },
@@ -304,45 +294,14 @@ const comments = [
     { id: 1, destinationId: 1, userId: 1, text: 'Amazing city!' },
     { id: 2, destinationId: 2, userId: 2, text: 'I love the skyscrapers!' }
 ];
-// Middleware to parse query parameters
-app.use(express.urlencoded({ extended: true }));
 
-// Route to handle search and display results
+// Routes
 app.get('/', (req, res) => {
-  const query = req.query.name ? req.query.name.toLowerCase() : '';
-  
-  // Filter destinations based on the search query
-  const filteredDestinations = destinations.filter(destination => 
-    destination.name.toLowerCase().includes(query)
-  );
-
-  // Render the results (assuming you're using EJS)
-  res.render('index', { destinations: filteredDestinations });
-});
-
-// Route to handle adding new destinations (POST request)
-app.post('/api/destination', (req, res) => {
-  // Handle adding new destination logic here
-});
-
-// Route to handle file uploads
-app.post('/upload', (req, res) => {
-  // Handle file upload logic here
-});
-
-
-// Routes for destinations
-app.get('/', (req, res) => {
-    const { name } = req.query;
-    let filteredDestinations = destinations;
-    if (name) {
-        filteredDestinations = destinations.filter(d => d.name.toLowerCase().includes(name.toLowerCase()));
-    }
+    const query = req.query.name ? req.query.name.toLowerCase() : '';
+    const filteredDestinations = destinations.filter(destination => 
+        destination.name.toLowerCase().includes(query)
+    );
     res.render('index', { destinations: filteredDestinations });
-});
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
 });
 
 app.get('/destination/:id', (req, res) => {
@@ -351,7 +310,15 @@ app.get('/destination/:id', (req, res) => {
     res.render('destination', { destination, comments: destinationComments });
 });
 
-// API endpoints for destinations
+app.get('/users', (req, res) => {
+    res.render('users', { users });
+});
+
+app.get('/comments', (req, res) => {
+    res.render('comments', { comments });
+});
+
+// API routes
 app.get('/api/destinations', (req, res) => {
     const { name } = req.query;
     let filteredDestinations = destinations;
@@ -401,11 +368,6 @@ app.delete('/api/destination/:id', (req, res) => {
     }
 });
 
-// Routes for users
-app.get('/users', (req, res) => {
-    res.render('users', { users });
-});
-
 app.get('/api/users', (req, res) => {
     res.json(users);
 });
@@ -447,11 +409,6 @@ app.delete('/api/user/:id', (req, res) => {
     } else {
         res.status(404).json({ message: 'User not found' });
     }
-});
-
-// Routes for comments
-app.get('/comments', (req, res) => {
-    res.render('comments', { comments });
 });
 
 app.get('/api/comments', (req, res) => {
@@ -496,7 +453,7 @@ app.delete('/api/comment/:id', (req, res) => {
     }
 });
 
-// Routes for image upload
+// Route for file upload
 app.post('/upload', upload.single('image'), (req, res) => {
     res.send('File uploaded successfully');
 });
