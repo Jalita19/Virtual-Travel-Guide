@@ -1,25 +1,112 @@
-<!-- views/index.ejs -->
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Virtual Travel Guide</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <style>
+    .destination {
+      margin-bottom: 20px;
+    }
+    .destination img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Virtual Travel Guide</h1>
+  <form method="GET" action="/"></form>
+    <input type="text" name="name" placeholder="Search by name">
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+    <% destinations.forEach(destination => { %>
+      <li class="destination">
+        <h2><a href="/destination/<%= destination.id %>"><%= destination.name %></a></h2>
+        <img src="/images/<%= destination.image %>" alt="<%= destination.name %>">
+        <p><%= destination.description %></p>
+      </li>
+    <% }) %>
+  </ul>
+  <h2>Add New Destination</h2>
+  <form action="/api/destination" method="POST">
+    <label for="name">Destination Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter destination name" required>
+    <br>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" placeholder="Enter description" required>
+    <br>
+    <label for="image">Image Filename:</public></label>
+    <input type="text" id="image" name="image" placeholder="Enter image filename" required>
+    <br>
+    <button type="submit">Add Destination</button>
+  </form>
+  
+  <!-- <h2>Users</h2>
+  <a href="/users">View Users</a> -->
+
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Virtual Travel Guide</title>
+  <title>Virtual Travel Guide</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <style>
+    .destination {
+      margin-bottom: 10px;
+    }
+    .destination img {
+      width: 200px;
+      height: 100px;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
-    <h1>Destinations</h1>
-    <ul>
-        <% destinations.forEach(destination => { %>
-            <li>
-                <h2><%= destination.name %></h2>
-                <p><%= destination.description %></p>
-            </li>
-        <% }) %>
-    </ul>
+  <h1>Welcome to the Virtual Travel Guide</h1>
+  
+  <!-- Search Form -->
+  <form method="GET" action="/">
+    <input type="text" name="name" placeholder="Search by name">
+    <button type="submit">Search</button>
+  </form>
+  
+  <!-- Display Destinations -->
+  <ul>
+    <% destinations.forEach(destination => { %>
+      <li class="destination">
+        <h2><a href="/destination/<%= destination.id %>"><%= destination.name %></a></h2>
+        <img src="<%= destination.image %>" alt="<%= destination.name %>">
+        <p><%= destination.description %></p>
+      </li>
+    <% }) %>
+  </ul>
+  
+  <!-- Add New Destination -->
+  <h2>Add New Destination</h2>
+  <form action="/api/destination" method="POST">
+    <label for="name">Destination Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter destination name" required>
+    <br>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" placeholder="Enter description" required>
+    <br>
+    <label for="image">Image Filename:</label>
+    <input type="text" id="image" name="image" placeholder="Enter image filename" required>
+    <br>
+    <button type="submit">Add Destination</button>
+  </form>
+  
+  <!-- Upload Image -->
+  <h2>Upload an Image</h2>
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <button type="submit">Upload Image</button>
+  </form>
 
-    <h2>Add a New Destination</h2>
-    <form action="/api/destinations" method="post">
-        <input type="text" name="name" placeholder="Destination name" required>
-        <input type="text" name="description" placeholder="Description" required>
-        <button type="submit">Add Destination</button>
-    </form>
+  <!-- Optional Users Section -->
+  <!-- <h2>Users</h2>
+  <a href="/users">View Users</a> -->
 </body>
 </html>
